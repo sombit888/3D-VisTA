@@ -13,7 +13,7 @@ pipeline:
       pc_seq_length: 80
       anno_type: 'nr3d'
       pc_type: 'gt'
-      sr3d_plus_aug: True
+      sr3d_plus_aug: False
 
   lang_encoder:
     name: bert_lang_encoder
@@ -75,18 +75,18 @@ pipeline:
   logger:
     name: tensorboard_logger
     args:
-      log_dir: ../runs/
+      log_dir: ../runs_noaug/
   
   saver:
     name: model_saver
     args:
-      save_name: model.pth
+      save_name: model_noaug.pth
       load_dir: project/pretrain_weights
       # load_name: nr3d.pth
       load_name: pretrain.pth
 
-  batch_size: 64
-  learning_rate: 1.0e-4
+  batch_size: 128
+  learning_rate: 5.0e-5
   grad_norm: 5.0
   epochs: 100
   warmup_steps: 5000
