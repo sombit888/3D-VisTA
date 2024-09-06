@@ -85,8 +85,8 @@ pipeline:
       # load_name: nr3d.pth
       load_name: pretrain.pth
 
-  batch_size: 128
-  learning_rate: 5.0e-5
+  batch_size: 64
+  learning_rate: 1.0e-4
   grad_norm: 5.0
   epochs: 100
   warmup_steps: 5000
