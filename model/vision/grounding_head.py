@@ -25,6 +25,7 @@ class GroundHeadV1(nn.Module):
             input_size, hidden_size,
             sem_cls_size, dropout=dropout
         )
+        self.distance_head = get_mlp_head(input_size,hidden_size, 3,dropout=dropout)
         
     def forward(self, txt_embeds, obj_embeds, obj_pre_embeds, obj_masks):
         og3d_logits = self.og3d_head(obj_embeds).squeeze(2)
