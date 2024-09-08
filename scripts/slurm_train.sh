@@ -5,7 +5,7 @@
 #SBATCH --nodelist=gcpl4-eu-1
 #SBATCH --gres=gpu:l4-24g:1    
 #SBATCH --time=48:00:00        
-#SBATCH --mem-per-gpu=32G
+#SBATCH --mem-per-gpu=28G
 #SBATCH --output=/scratch/sombit_dey/job_%j.out
 #SBATCH --error=/scratch/sombit_dey/job_%j.err
 
@@ -18,5 +18,5 @@ export PATH=$CUDA_HOME/bin:$PATH
 
 cd /scratch/sombit_dey/3D-VisTA
 git pull origin main
-micromamba run -n 3dvista python run.py --config project/vista/nr3d_config.yml           
+micromamba run -n 3dvista python run.py --config project/vista/nr3d_config_no_aug.yml      
 # python run.py --config project/vista/nr3d_config.yml 

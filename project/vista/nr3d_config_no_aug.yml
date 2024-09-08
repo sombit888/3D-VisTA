@@ -13,7 +13,7 @@ pipeline:
       pc_seq_length: 80
       anno_type: 'nr3d'
       pc_type: 'gt'
-      sr3d_plus_aug: True
+      sr3d_plus_aug: False
 
   lang_encoder:
     name: bert_lang_encoder
@@ -80,9 +80,9 @@ pipeline:
   saver:
     name: model_saver
     args:
-      save_name: model.pth
+      save_name: model_noaug.pth
       load_dir: project/pretrain_weights
-      save_dir: project/results_orig
+      save_dir: project/results
       # load_name: nr3d.pth
       load_name: pretrain.pth
 
