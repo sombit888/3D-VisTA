@@ -335,7 +335,7 @@ class OptimusPrimePipeline(Pipeline, NormalDataloaderMixin, ModelOptimizationMix
         self.lang_encoder.load_state_dict(state_dict['lang_encoder'])
         self.point_encoder.load_state_dict(state_dict['point_encoder'])
         self.unified_encoder.load_state_dict(state_dict['unified_encoder'])
-        self.ground_head.load_state_dict(state_dict['ground_head'])
+        self.ground_head.load_state_dict(state_dict['ground_head'],strict=False)
         try:
             self.qa_head.load_state_dict(state_dict['qa_head'])
         except: 
