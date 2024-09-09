@@ -19,7 +19,8 @@ def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, o
     object_indices = torch.arange(num_objects).unsqueeze(0).expand(batch_size, -1)  # (64, 80)
 
     # Select distances based on target_index
-    correct_distances = d_mat[batch_indices, :, tgt_object_id]
+    correct_distances = d_mat[batch_indices, 0, tgt_object_id]
+    off_loss = offset_loss(offset_head[obj_masks],correct_distances[obj_masks])
     # Compute pairwise differences
     differences = obj_centers_expanded - obj_centers_transposed  # (64, 80, 80, 3)
     og3d_loss = F.cross_entropy(og3d_logits, tgt_object_id.squeeze(1))
@@ -27,7 +28,7 @@ def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, o
     obj_cls_raw_loss = (F.cross_entropy(obj_cls_raw_logits.permute(0, 2, 1), obj_labels, reduction='none') * obj_masks).sum() / obj_masks.sum()
     obj_cls_pre_loss = (F.cross_entropy(obj_cls_pre_logits.permute(0, 2, 1), obj_labels, reduction='none') * obj_masks).sum() / obj_masks.sum()
     obj_cls_post_loss = (F.cross_entropy(obj_cls_post_logits.permute(0, 2, 1), obj_labels, reduction='none') * obj_masks).sum() / obj_masks.sum()
-    total_loss = og3d_loss + txt_cls_loss + obj_cls_raw_loss + obj_cls_pre_loss + obj_cls_post_loss
+    total_loss = og3d_loss + txt_cls_loss + obj_cls_raw_loss + obj_cls_pre_loss + obj_cls_post_loss + off_loss
     return total_loss, og3d_loss, txt_cls_loss, obj_cls_raw_loss, obj_cls_pre_loss, obj_cls_post_loss
 
 @registry.register_optimizer("qa_loss_v1")
