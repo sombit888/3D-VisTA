@@ -225,7 +225,7 @@ class OptimusPrimePipeline(Pipeline, NormalDataloaderMixin, ModelOptimizationMix
             language_fuse_feature, point_fuse_feature  = self.unified_encoder(lang_basic_features, data_dict['txt_masks'], point_basic_features, data_dict['obj_locs'], data_dict['obj_masks'])
         
         # task head
-        txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, og3d_logits = self.ground_head(language_fuse_feature, point_fuse_feature, point_features_pre, data_dict['obj_masks'])
+        txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, og3d_logits,offset_head = self.ground_head(language_fuse_feature, point_fuse_feature, point_features_pre, data_dict['obj_masks'])
         answer_scores = self.qa_head(point_fuse_feature, data_dict['obj_masks'], language_fuse_feature, data_dict['txt_masks'])
         txt_lm_cls_logits, scene_txt_match_logit = self.pretrain_head(language_fuse_feature)
         txt_caption_cls_logit = self.caption_head(language_fuse_feature)
@@ -239,7 +239,7 @@ class OptimusPrimePipeline(Pipeline, NormalDataloaderMixin, ModelOptimizationMix
         data_dict['txt_lm_cls_logits'] = txt_lm_cls_logits
         data_dict['scene_txt_match_logit'] = scene_txt_match_logit
         data_dict['txt_caption_cls_logit'] = txt_caption_cls_logit
-        
+        data_dict['offset_head'] =offset_head
         return data_dict
     
     def get_loss(self, data_dict):

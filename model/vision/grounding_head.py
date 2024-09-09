@@ -36,7 +36,8 @@ class GroundHeadV1(nn.Module):
         txt_cls_logits = self.txt_clf_head(txt_embeds[:, 0])
         obj_cls_logits = self.obj3d_clf_head(obj_embeds)
         obj_cls_pre_logits = self.obj3d_clf_pre_head(obj_pre_embeds)
-        return txt_cls_logits, obj_cls_logits, obj_cls_pre_logits, og3d_logits
+        offset_head = self.distance_head(obj_embeds)
+        return txt_cls_logits, obj_cls_logits, obj_cls_pre_logits, og3d_logits,offset_head
     
 if __name__ == '__main__':
     GroundHeadV1()
