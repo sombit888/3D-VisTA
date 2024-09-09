@@ -6,7 +6,8 @@ from pipeline.registry import registry
 
 
 @registry.register_optimizer("refer_loss_v1")
-def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, obj_cls_raw_logits, og3d_logits, tgt_object_label, tgt_object_id, obj_labels, obj_masks):
+def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, obj_cls_raw_logits, og3d_logits, tgt_object_label, tgt_object_id, obj_labels, obj_masks,candidate_center,offset_head):
+    breakpoint()
     og3d_loss = F.cross_entropy(og3d_logits, tgt_object_id.squeeze(1))
     txt_cls_loss = F.cross_entropy(txt_cls_logits, tgt_object_label.squeeze(1))
     obj_cls_raw_loss = (F.cross_entropy(obj_cls_raw_logits.permute(0, 2, 1), obj_labels, reduction='none') * obj_masks).sum() / obj_masks.sum()
