@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=with_offset_loss   # Job name
+#SBATCH --job-name=with_offset_loss_scratch   # Job name
 #SBATCH --nodes=1                    # Number of nodes
 #SBATCH --cpus-per-gpu=12
 #SBATCH --nodelist=gcpl4-eu-1
