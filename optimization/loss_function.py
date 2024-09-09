@@ -1,13 +1,27 @@
 import torch
 import torch.nn.functional as F
 
-from torch.nn import CrossEntropyLoss
+from torch.nn import CrossEntropyLoss,L1Loss 
 from pipeline.registry import registry
 
 
 @registry.register_optimizer("refer_loss_v1")
 def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, obj_cls_raw_logits, og3d_logits, tgt_object_label, tgt_object_id, obj_labels, obj_masks,candidate_center,offset_head):
     breakpoint()
+    offset_loss = L1Loss()
+    obj_centers_expanded = candidate_center.unsqueeze(2)  # (64, 80, 1, 3)
+    obj_centers_transposed = candidate_center.unsqueeze(1)  # (64, 1, 80, 3)
+    d_mat = obj_centers_expanded - obj_centers_transposed
+    batch_size, num_objects, _, num_coords = d_mat.shape
+    
+    # Prepare indices for advanced indexing
+    batch_indices = torch.arange(batch_size).unsqueeze(1).expand(-1, num_objects)  # (64, 80)
+    object_indices = torch.arange(num_objects).unsqueeze(0).expand(batch_size, -1)  # (64, 80)
+
+    # Select distances based on target_index
+    correct_distances = d_mat[batch_indices, object_indices,tgt_object_id.squeeze()]
+    # Compute pairwise differences
+    differences = obj_centers_expanded - obj_centers_transposed  # (64, 80, 80, 3)
     og3d_loss = F.cross_entropy(og3d_logits, tgt_object_id.squeeze(1))
     txt_cls_loss = F.cross_entropy(txt_cls_logits, tgt_object_label.squeeze(1))
     obj_cls_raw_loss = (F.cross_entropy(obj_cls_raw_logits.permute(0, 2, 1), obj_labels, reduction='none') * obj_masks).sum() / obj_masks.sum()
