@@ -75,12 +75,12 @@ pipeline:
   logger:
     name: tensorboard_logger
     args:
-      log_dir: ../runs_noaug/
+      log_dir: ../runs_offset/
   
   saver:
     name: model_saver
     args:
-      save_name: model.pth
+      save_name: model_offset.pth
       load_dir: project/pretrain_weights
       save_dir: project/results_orig
       # load_name: nr3d.pth
