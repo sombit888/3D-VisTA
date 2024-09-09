@@ -157,7 +157,6 @@ class OptimusPrimePipeline(Pipeline, NormalDataloaderMixin, ModelOptimizationMix
         self.set_model_state('train')
         for i, data_dict in enumerate(tqdm(self.train_data_loader)):
             # add step and total steps to data_dict
-            breakpoint()
             data_dict['cur_step'] = epoch * len(self.train_data_loader) + i 
             data_dict['total_steps'] = self.total_steps
             

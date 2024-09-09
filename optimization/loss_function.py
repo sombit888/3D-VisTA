@@ -7,7 +7,6 @@ from pipeline.registry import registry
 
 @registry.register_optimizer("refer_loss_v1")
 def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, obj_cls_raw_logits, og3d_logits, tgt_object_label, tgt_object_id, obj_labels, obj_masks,candidate_center,offset_head):
-    breakpoint()
     offset_loss = L1Loss()
     obj_centers_expanded = candidate_center.unsqueeze(2)  # (64, 80, 1, 3)
     obj_centers_transposed = candidate_center.unsqueeze(1)  # (64, 1, 80, 3)
