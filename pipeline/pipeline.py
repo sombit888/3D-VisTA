@@ -240,8 +240,19 @@ class OptimusPrimePipeline(Pipeline, NormalDataloaderMixin, ModelOptimizationMix
         data_dict['scene_txt_match_logit'] = scene_txt_match_logit
         data_dict['txt_caption_cls_logit'] = txt_caption_cls_logit
         data_dict['offset_head'] =offset_head
+        data_dict['candidate_center'] = self.convert_boxes_to_centers_3d(data_dict['obj_boxes'])
         return data_dict
-    
+    def convert_boxes_to_centers_3d(self, boxes):
+
+        x_min, y_min, z_min = boxes[..., 0], boxes[..., 1], boxes[..., 2]
+        x_max, y_max, z_max = boxes[..., 3], boxes[..., 4], boxes[..., 5]
+        x_center = (x_min + x_max) / 2
+        y_center = (y_min + y_max) / 2
+        z_center = (z_min + z_max) / 2
+
+        centers = torch.stack((x_center, y_center, z_center), dim=-1)
+
+        return centers
     def get_loss(self, data_dict):
         if self.task == 'scanrefer' or self.task == 'referit3d' :
             data_dict = self.get_refer_loss(data_dict)
