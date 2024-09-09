@@ -19,7 +19,7 @@ def get_refer_loss_v1(txt_cls_logits, obj_cls_post_logits, obj_cls_pre_logits, o
     object_indices = torch.arange(num_objects).unsqueeze(0).expand(batch_size, -1)  # (64, 80)
 
     # Select distances based on target_index
-    correct_distances = d_mat[batch_indices, object_indices,tgt_object_id.squeeze()]
+    correct_distances = d_mat[batch_indices, :, tgt_object_id]
     # Compute pairwise differences
     differences = obj_centers_expanded - obj_centers_transposed  # (64, 80, 80, 3)
     og3d_loss = F.cross_entropy(og3d_logits, tgt_object_id.squeeze(1))
